@@ -1,14 +1,20 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js";
+import pagination from "./pagination.js";
+
 // 建立modal
 let projectModal = {};
 let delProductModal = {};
 
 const app = createApp({
+  components: {
+    pagination,
+  },
   data() {
     return {
       url: "https://vue3-course-api.hexschool.io/v2",
       path: "shio-vue",
       status: false,
+      pagination: {},
       products: [],
       tempProduct: {
         imagesUrl: [],
@@ -63,13 +69,18 @@ const app = createApp({
     },
 
     //取得產品列表
-    getProducts() {
+    getProducts(page = 1) {
+      //參數預設值 不代入任何參數的情況下的預設
       axios
-        .get(`${this.url}/api/${this.path}/admin/products/all`)
+        .get(
+          // query的特殊代法
+          `https://vue3-course-api.hexschool.io/v2/api/shio-vue/admin/products/?page=${page}`
+        )
         // 成功的結果
         .then((res) => {
           // 將產品列表帶入空陣列
           this.products = res.data.products;
+          this.pagination = res.data.pagination;
         })
         // 失敗的結果
         .catch((error) => {
@@ -145,5 +156,8 @@ const app = createApp({
     },
   },
 });
-
+app.component("productModal", {
+  props: ["tempProduct"],
+  template: "#templateforProduct",
+});
 app.mount("#app");
