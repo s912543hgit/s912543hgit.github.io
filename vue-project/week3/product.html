@@ -32,6 +32,15 @@
     <div class="container">
       <div id="app" class="container">
         <table class="table mt-4">
+          <button
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          id="modal"
+          type="button"
+          @click="openModal('new')"
+        >
+          建立新的產品
+        </button>
           <thead>
             <tr>
               <th>產品名稱</th>

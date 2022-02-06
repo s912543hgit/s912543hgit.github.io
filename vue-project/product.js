@@ -97,7 +97,7 @@ const app = createApp({
           alert(response.data.message);
           projectModal.hide();
           // 重新取得產品列表
-          this.getData();
+          this.getProducts();
         })
         .catch((err) => {
           alert(err.data.message);
