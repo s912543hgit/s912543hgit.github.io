@@ -132,7 +132,6 @@
                         type="text"
                         class="form-control"
                         placeholder="請輸入圖片連結"
-                        //對應欄位
                         v-model="tempProduct.imagesUrl[key]"
                       />
                       <img
@@ -142,7 +141,6 @@
                       />
                     </template>
                     <button
-                    //判斷1:如果沒有圖片的話，就要跑出按鈕來新增 判斷2:陣列裡面是否有輸入文字
                       v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length -1] "
                       type="button"
                       class="btn btn-outline-primary btn-sm d-block w-100"
