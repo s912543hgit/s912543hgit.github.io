@@ -1,27 +1,14 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js";
 
-//匯入元件
-import pagination from './component/pagination.js';
-import productModal from './component/productmodal.js';
-import delModal from  './component/delmodal.js';
-
-
 // 建立modal
-let productmodal = {};
+let projectModal = {};
 let delProductModal = {};
-//宣告變數
-const apiUrl =  "https://vue3-course-api.hexschool.io/v2";
-const apiPath = "shio-vue";
 
 const app = createApp({
-  //區域註冊
-  components:{
-    pagination,
-    productModal,
-    delModal
-  },
   data() {
     return {
+      url: "https://vue3-course-api.hexschool.io/v2",
+      path: "shio-vue",
       status: false,
       pagination: {},
       products: [],
@@ -42,15 +29,14 @@ const app = createApp({
     this.checkLogin();
 
     // 產品用modal
-      // this.projectModal = new bootstrap.Modal(document.this.$refs.modal)
-    productmodal = new bootstrap.Modal(
+    // 刪除產品用modal
+    projectModal = new bootstrap.Modal(
       document.getElementById("productModal"),
       {
         // 不能透過esc關掉modal
         keyboard: false,
       }
     );
-        // 刪除產品用modal
     delProductModal = new bootstrap.Modal(
       document.getElementById("delProductModal"),
       {
@@ -63,7 +49,7 @@ const app = createApp({
     checkLogin() {
       // 確認是否登入
       axios
-        .post(`${apiUrl}/api/user/check`)
+        .post(`${this.url}/api/user/check`)
         // 成功的結果
         .then((res) => {
           // 取得產品列表
@@ -85,7 +71,7 @@ const app = createApp({
       axios
         .get(
           // query的特殊代法
-          `${apiUrl}/api/${apiPath}/admin/products/?page=${page}`
+          `${this.url}/api/${this.path}/admin/products/?page=${page}`
         )
         // 成功的結果
         .then((res) => {
@@ -112,13 +98,13 @@ const app = createApp({
         };
         // 改變status的狀態
         this.status = true;
-        productmodal.show();
+        projectModal.show();
       } else if (status === "edit") {
         // 需要將產品資料帶上去，因此使用淺拷貝方式 目的是為了不要改變原始物件資料
         this.tempProduct = { ...item };
         // 因為非新增物件，因此狀態為false
         this.status = false;
-        productmodal.show();
+        projectModal.show();
       } else if (status === "delete") {
         this.tempProduct = { ...item };
         delProductModal.show();
@@ -127,55 +113,78 @@ const app = createApp({
   },
 });
 
-// app.component("productModal", {
-//   // 必須去接收外層的資料來進行運作
-//   props: ["tempProduct","status"],
-//   template: "#templateforProductModal",
-//   methods:{
-//     updateProduct() {
-//       let url = `${apiUrl}/api/shio-vue/admin/product`;
-//       let method = "post";
-//       // 根據status來決定要串接post或是put api
-//       // 編輯的狀態
-//       if (!this.status) {
-//         url = `${apiUrl}/api/shio-vue/admin/product/${this.tempProduct.id}`;
-//         method = "put";
-//       }
-//       // post和put需要代的參數相同，因此可以寫在一起
-//       // [method]裡帶入httpmethods
-//       axios[method](url, { data: this.tempProduct })
-//         .then((response) => {
-//           alert(response.data.message);
-//           productModal.hide();
-//           this.$emit('get-products')
-//           // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
-//         })
-//         .catch((error) => {
-//           alert(error.data.message);
-//         });
-//     },
-//   }
-// });
+app.component("pagination" ,{
+  // 接收外部傳來的pages
+  props: ["pages"],
+  template:"#pagination",
+  methods:{
+    emitPages(item) {
+      this.$emit('emit-pages', item);
+    }
+  }
+})
 
-// app.component("delModal", {
-//   props: ["tempProduct"],
-//   template: "#templatefordelModal",
-//   methods:{
-//     // 刪除產品
-//       delProduct() {
-//         let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
-//         axios
-//           .delete(url, { data: this.tempProduct })
-//           .then((response) => {
-//             alert(response.data.message);
-//             delProductmodal.hide();
-//             // 重新取得產品列表
-//             this.$emit('get-products')
-//           })
-//           .catch((err) => {
-//             alert(err.data.message);
-//           });
-//         },
-//   }
-// });
+app.component("productModal", {
+  data() {
+    return {
+      url: "https://vue3-course-api.hexschool.io/v2",
+      path: "shio-vue",
+    };
+  },
+  // 必須去接收外層的資料來進行運作
+  props: ["tempProduct","status"],
+  template: "#templateforProductModal",
+  methods:{
+    updateProduct() {
+      let url = `${this.url}/api/shio-vue/admin/product`;
+      let method = "post";
+      // 根據status來決定要串接post或是put api
+      // 編輯的狀態
+      if (!this.status) {
+        url = `${this.url}/api/shio-vue/admin/product/${this.tempProduct.id}`;
+        method = "put";
+      }
+      // post和put需要代的參數相同，因此可以寫在一起
+      // [method]裡帶入httpmethods
+      axios[method](url, { data: this.tempProduct })
+        .then((response) => {
+          alert(response.data.message);
+          projectModal.hide();
+          this.$emit('get-products')
+          // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
+        })
+        .catch((error) => {
+          alert(error.data.message);
+        });
+    },
+  }
+});
+
+app.component("delModal", {
+  data() {
+    return {
+      url: "https://vue3-course-api.hexschool.io/v2",
+      path: "shio-vue",
+    };
+  },
+  props: ["tempProduct"],
+  template: "#templatefordelModal",
+  methods:{
+    // 刪除產品
+      delProduct() {
+        let url = `${this.url}/api/${this.path}/admin/product/${this.tempProduct.id}`;
+        axios
+          .delete(url, { data: this.tempProduct })
+          .then((response) => {
+            alert(response.data.message);
+            delProductModal.hide();
+            // 重新取得產品列表
+            this.$emit('get-products')
+          })
+          .catch((err) => {
+            alert(err.data.message);
+          });
+        },
+    }
+});
 app.mount("#app");
