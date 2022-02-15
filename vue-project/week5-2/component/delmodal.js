@@ -1,26 +1,15 @@
+
+let delProductModal = {};
+
 const apiUrl =  "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "shio-vue";
 
 export default {
     props: ["tempProduct"],
     methods:{
-        // deleteProduct() {
-        //   this.$emit('emit-del');
-        // },
-        delProduct() {
-          let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
-          axios
-            .delete(url, { data: this.tempProduct })
-            .then((response) => {
-              alert(response.data.message);
-              delProductModal.hide();
-              // 重新取得產品列表
-              this.$emit('get-products')
-            })
-            .catch((error) => {
-              console.dir(error);
-            });
-          },
+        deleteProduct() {
+          this.$emit('emit-del');
+        }
     },
     template:`
     <div
@@ -60,7 +49,7 @@ export default {
           <button
             type="button"
             class="btn btn-danger"
-            @click="delProduct()"
+            @click="deleteProduct()"
           >
             確認刪除
           </button>
