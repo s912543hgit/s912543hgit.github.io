@@ -101,7 +101,6 @@ const app = createApp({
     openProduct(item) {
       this.tempProduct = item;
     },
-
     // modal的JS
     // 參數的status  new edit delete
     openModal(status, item) {
@@ -124,58 +123,44 @@ const app = createApp({
         delProductModal.show();
       }
     },
+
+    updateProduct() {
+      let url = `${apiUrl}/api/shio-vue/admin/product`;
+      let method = "post";
+      // 根據status來決定要串接post或是put api
+      // 編輯的狀態
+      if (!this.status) {
+        url = `${apiUrl}/api/shio-vue/admin/product/${this.tempProduct.id}`;
+        method = "put";
+      }
+      // post和put需要代的參數相同，因此可以寫在一起
+      // [method]裡帶入httpmethods
+      axios[method](url, { data: this.tempProduct })
+        .then((response) => {
+          alert(response.data.message);
+          productmodal.hide();
+          this.$emit('get-products')
+          // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
+        })
+        .catch((error) => {
+          alert(error.data.message);
+        });
+    },
+
+    delProduct() {
+      let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
+      axios
+        .delete(url, { data: this.tempProduct })
+        .then((response) => {
+          alert(response.data.message);
+          delProductModal.hide();
+          // 重新取得產品列表
+          this.$emit('get-products')
+        })
+        .catch((error) => {
+          console.dir(error);
+        });
+      },
   },
 });
-
-// app.component("productModal", {
-//   // 必須去接收外層的資料來進行運作
-//   props: ["tempProduct","status"],
-//   template: "#templateforProductModal",
-//   methods:{
-//     updateProduct() {
-//       let url = `${apiUrl}/api/shio-vue/admin/product`;
-//       let method = "post";
-//       // 根據status來決定要串接post或是put api
-//       // 編輯的狀態
-//       if (!this.status) {
-//         url = `${apiUrl}/api/shio-vue/admin/product/${this.tempProduct.id}`;
-//         method = "put";
-//       }
-//       // post和put需要代的參數相同，因此可以寫在一起
-//       // [method]裡帶入httpmethods
-//       axios[method](url, { data: this.tempProduct })
-//         .then((response) => {
-//           alert(response.data.message);
-//           productModal.hide();
-//           this.$emit('get-products')
-//           // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
-//         })
-//         .catch((error) => {
-//           alert(error.data.message);
-//         });
-//     },
-//   }
-// });
-
-// app.component("delModal", {
-//   props: ["tempProduct"],
-//   template: "#templatefordelModal",
-//   methods:{
-//     // 刪除產品
-//       delProduct() {
-//         let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
-//         axios
-//           .delete(url, { data: this.tempProduct })
-//           .then((response) => {
-//             alert(response.data.message);
-//             delProductmodal.hide();
-//             // 重新取得產品列表
-//             this.$emit('get-products')
-//           })
-//           .catch((err) => {
-//             alert(err.data.message);
-//           });
-//         },
-//   }
-// });
 app.mount("#app");

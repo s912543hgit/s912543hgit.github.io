@@ -75,8 +75,8 @@
         <pagination :pages="pagination" @emit-pages="getProducts"></pagination>
       </div>
       <!-- Modal -->
-      <product-modal :temp-product="tempProduct" @get-products="getProducts" :status="status"></product-modal>
-      <del-modal :temp-product="tempProduct"  @get-products="getProducts"></del-modal>
+      <product-modal :temp-product="tempProduct" :status="status" @emit-update="updateProduct" @get-products="getProducts"></product-modal>
+      <del-modal :temp-product="tempProduct" @emit-del="delProduct" @get-products="getProducts"></del-modal>
       <!-- Modal -->
     </div>
     <script

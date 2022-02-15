@@ -6,23 +6,10 @@ const apiPath = "shio-vue";
 
 export default {
     props: ["tempProduct"],
-    // template: "#templatefordelModal",
     methods:{
-      // 刪除產品
-        delProduct() {
-          let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
-          axios
-            .delete(url, { data: this.tempProduct })
-            .then((response) => {
-              alert(response.data.message);
-              this.delProductModal.hide();
-              // 重新取得產品列表
-              this.$emit('get-products')
-            })
-            .catch((err) => {
-              alert(err.data.message);
-            });
-          },
+        deleteProduct() {
+          this.$emit('emit-del');
+        }
     },
     template:`
     <div
@@ -62,7 +49,7 @@ export default {
           <button
             type="button"
             class="btn btn-danger"
-            @click="delProduct()"
+            @click="deleteProduct()"
           >
             確認刪除
           </button>
