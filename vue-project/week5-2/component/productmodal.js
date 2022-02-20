@@ -6,9 +6,29 @@ export default {
   // 必須去接收外層的資料來進行運作
   props: ["tempProduct","status"],
   methods:{
-    update(){
-      this.$emit('emit-update');
-    }
+    updateProduct() {
+      let url = `${apiUrl}/api/shio-vue/admin/product`;
+      let method = "post";
+      // 根據status來決定要串接post或是put api
+      // 編輯的狀態
+      if (!this.status) {
+        url = `${apiUrl}/api/shio-vue/admin/product/${this.tempProduct.id}`;
+        method = "put";
+      }
+      // post和put需要代的參數相同，因此可以寫在一起
+      // [method]裡帶入httpmethods
+      axios[method](url, { data: this.tempProduct })
+        .then((response) => {
+          alert(response.data.message);
+          // productmodal.hide();
+          this.$emit('close-product');
+          this.$emit('get-products')
+          // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
+        })
+        .catch((error) => {
+          alert(error.data.message);
+        });
+    },
   },
     template:`
     <div
@@ -214,7 +234,7 @@ export default {
             <button
               type="button"
               class="btn btn-primary"
-              @click="update()"
+              @click="updateProduct()"
             >
               確認
             </button>

@@ -13,7 +13,8 @@ export default {
             .delete(url, { data: this.tempProduct })
             .then((response) => {
               alert(response.data.message);
-              delProductModal.hide();
+              // delProductModal.hide();
+              this.$emit('close-del');
               // 重新取得產品列表
               this.$emit('get-products')
             })

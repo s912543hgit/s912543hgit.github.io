@@ -20,7 +20,8 @@ export default {
       axios[method](url, { data: this.tempProduct })
         .then((response) => {
           alert(response.data.message);
-          productmodal.hide();
+          // productmodal.hide();
+          this.$emit('close-product');
           this.$emit('get-products')
           // this.getProducts(); 在內層無法觸發getproduct(為外層方法)
         })

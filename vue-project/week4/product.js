@@ -123,6 +123,13 @@ const app = createApp({
         delProductModal.show();
       }
     },
+
+    closeDelModal() {
+      delProductModal.hide();
+    },
+    closeProductModal() {
+      productmodal.hide();
+    }
   },
 });
 app.mount("#app");
