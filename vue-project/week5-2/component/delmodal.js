@@ -4,9 +4,6 @@ const apiPath = "shio-vue";
 export default {
     props: ["tempProduct"],
     methods:{
-        // deleteProduct() {
-        //   this.$emit('emit-del');
-        // },
         delProduct() {
           let url = `${apiUrl}/api/${apiPath}/admin/product/${this.tempProduct.id}`;
           axios

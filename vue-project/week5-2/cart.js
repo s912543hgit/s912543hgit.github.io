@@ -100,7 +100,6 @@ const app = createApp({
             .then((res)=>{
                 console.log(res);
                 this.getCart();
-                //清空表單
                 this.$refs.form.resetForm();
             })
             .catch((error) => {
