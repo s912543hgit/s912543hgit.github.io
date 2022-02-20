@@ -82,6 +82,14 @@ const app = createApp({
                 this.isLoadingItem = '';
             });
         },
+        //清空購物車
+        clearCartItem() {
+            axios.delete(`${apiUrl}/api/${apiPath}/carts/`,)
+            .then((res)=>{
+                console.log(res);
+                this.getCart();
+            });
+        },
         //更新購物車
         updateCartItem(item) {
             const data = {
