@@ -18,6 +18,40 @@
               </li>
             </ul>
           </div>
+          <button type="button" class="btn btn-primary">
+            結帳
+            <span class="badge rounded-pill bg-danger">{{ cartData?.carts?.length }}</span>
+          </button>
         </div>
       </nav>
   </template>
+
+<script>
+import emitter from '@/libs/emitter'
+
+export default {
+  data () {
+    return {
+      cartData: {
+        carts: {}
+      }
+    }
+  },
+  methods: {
+    // 取得購物車內容
+    getCart () {
+      this.$http.get(`${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`)
+        .then((res) => {
+          console.log('cart:', res)
+          this.cartData = res.data.data
+        })
+    }
+  },
+  mounted () {
+    this.getCart()
+    emitter.on('get-cart', () => {
+      this.getCart()
+    })
+  }
+}
+</script>

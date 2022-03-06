@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     getProducts () {
-      this.$http('https://vue3-course-api.hexschool.io/v2/api/shio-vue/products/all')
+      this.$http(`${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`)
         .then(res => {
           this.products = res.data.products
         })

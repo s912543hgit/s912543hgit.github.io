@@ -14,7 +14,7 @@ export default {
     getProduct () {
       console.log(this.$route)
       const { id } = this.$route.params
-      this.$http(`https://vue3-course-api.hexschool.io/v2/api/shio-vue/product/${id}`)
+      this.$http(`${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`)
         .then(res => {
           this.product = res.data.product
         })
